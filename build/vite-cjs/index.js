@@ -3910,13 +3910,13 @@ var require_ast = __commonJS({
       const maybeKind = maybeNode === null || maybeNode === void 0 ? void 0 : maybeNode.kind;
       return typeof maybeKind === "string" && kindValues.has(maybeKind);
     }
-    var OperationTypeNode2;
-    exports.OperationTypeNode = OperationTypeNode2;
-    (function(OperationTypeNode3) {
-      OperationTypeNode3["QUERY"] = "query";
-      OperationTypeNode3["MUTATION"] = "mutation";
-      OperationTypeNode3["SUBSCRIPTION"] = "subscription";
-    })(OperationTypeNode2 || (exports.OperationTypeNode = OperationTypeNode2 = {}));
+    var OperationTypeNode;
+    exports.OperationTypeNode = OperationTypeNode;
+    (function(OperationTypeNode2) {
+      OperationTypeNode2["QUERY"] = "query";
+      OperationTypeNode2["MUTATION"] = "mutation";
+      OperationTypeNode2["SUBSCRIPTION"] = "subscription";
+    })(OperationTypeNode || (exports.OperationTypeNode = OperationTypeNode = {}));
   }
 });
 
@@ -6938,7 +6938,7 @@ var require_definition = __commonJS({
     exports.defineArguments = defineArguments;
     exports.getNamedType = getNamedType5;
     exports.getNullableType = getNullableType2;
-    exports.isAbstractType = isAbstractType;
+    exports.isAbstractType = isAbstractType2;
     exports.isCompositeType = isCompositeType;
     exports.isEnumType = isEnumType9;
     exports.isInputObjectType = isInputObjectType7;
@@ -7120,11 +7120,11 @@ var require_definition = __commonJS({
       }
       return type;
     }
-    function isAbstractType(type) {
+    function isAbstractType2(type) {
       return isInterfaceType12(type) || isUnionType12(type);
     }
     function assertAbstractType(type) {
-      if (!isAbstractType(type)) {
+      if (!isAbstractType2(type)) {
         throw new Error(
           `Expected ${(0, _inspect.inspect)(type)} to be a GraphQL abstract type.`
         );
@@ -19882,8 +19882,8 @@ var require_graceful_fs = __commonJS({
       }
       var fs$copyFile = fs4.copyFile;
       if (fs$copyFile)
-        fs4.copyFile = copyFile;
-      function copyFile(src, dest, flags, cb) {
+        fs4.copyFile = copyFile2;
+      function copyFile2(src, dest, flags, cb) {
         if (typeof flags === "function") {
           cb = flags;
           flags = 0;
@@ -20556,7 +20556,7 @@ var require_copy = __commonJS({
     }
     function onFile(srcStat, destStat, src, dest, opts, cb) {
       if (!destStat)
-        return copyFile(srcStat, src, dest, opts, cb);
+        return copyFile2(srcStat, src, dest, opts, cb);
       return mayCopyFile(srcStat, src, dest, opts, cb);
     }
     function mayCopyFile(srcStat, src, dest, opts, cb) {
@@ -20564,14 +20564,14 @@ var require_copy = __commonJS({
         fs3.unlink(dest, (err) => {
           if (err)
             return cb(err);
-          return copyFile(srcStat, src, dest, opts, cb);
+          return copyFile2(srcStat, src, dest, opts, cb);
         });
       } else if (opts.errorOnExist) {
         return cb(new Error(`'${dest}' already exists`));
       } else
         return cb();
     }
-    function copyFile(srcStat, src, dest, opts, cb) {
+    function copyFile2(srcStat, src, dest, opts, cb) {
       fs3.copyFile(src, dest, (err) => {
         if (err)
           return cb(err);
@@ -20754,18 +20754,18 @@ var require_copy_sync = __commonJS({
     }
     function onFile(srcStat, destStat, src, dest, opts) {
       if (!destStat)
-        return copyFile(srcStat, src, dest, opts);
+        return copyFile2(srcStat, src, dest, opts);
       return mayCopyFile(srcStat, src, dest, opts);
     }
     function mayCopyFile(srcStat, src, dest, opts) {
       if (opts.overwrite) {
         fs3.unlinkSync(dest);
-        return copyFile(srcStat, src, dest, opts);
+        return copyFile2(srcStat, src, dest, opts);
       } else if (opts.errorOnExist) {
         throw new Error(`'${dest}' already exists`);
       }
     }
-    function copyFile(srcStat, src, dest, opts) {
+    function copyFile2(srcStat, src, dest, opts) {
       fs3.copyFileSync(src, dest);
       if (opts.preserveTimestamps)
         handleTimestamps(srcStat.mode, src, dest);
@@ -24364,42 +24364,42 @@ var require_node = __commonJS({
       return Link2;
     }(events_1.EventEmitter);
     exports.Link = Link;
-    var File3 = function() {
-      function File4(link, node, flags, fd) {
+    var File4 = function() {
+      function File5(link, node, flags, fd) {
         this.position = 0;
         this.link = link;
         this.node = node;
         this.flags = flags;
         this.fd = fd;
       }
-      File4.prototype.getString = function(encoding) {
+      File5.prototype.getString = function(encoding) {
         if (encoding === void 0) {
           encoding = "utf8";
         }
         return this.node.getString();
       };
-      File4.prototype.setString = function(str) {
+      File5.prototype.setString = function(str) {
         this.node.setString(str);
       };
-      File4.prototype.getBuffer = function() {
+      File5.prototype.getBuffer = function() {
         return this.node.getBuffer();
       };
-      File4.prototype.setBuffer = function(buf) {
+      File5.prototype.setBuffer = function(buf) {
         this.node.setBuffer(buf);
       };
-      File4.prototype.getSize = function() {
+      File5.prototype.getSize = function() {
         return this.node.getSize();
       };
-      File4.prototype.truncate = function(len) {
+      File5.prototype.truncate = function(len) {
         this.node.truncate(len);
       };
-      File4.prototype.seekTo = function(position) {
+      File5.prototype.seekTo = function(position) {
         this.position = position;
       };
-      File4.prototype.stats = function() {
+      File5.prototype.stats = function() {
         return Stats_1.default.build(this.node);
       };
-      File4.prototype.write = function(buf, offset, length, position) {
+      File5.prototype.write = function(buf, offset, length, position) {
         if (offset === void 0) {
           offset = 0;
         }
@@ -24414,7 +24414,7 @@ var require_node = __commonJS({
         this.position = position + bytes;
         return bytes;
       };
-      File4.prototype.read = function(buf, offset, length, position) {
+      File5.prototype.read = function(buf, offset, length, position) {
         if (offset === void 0) {
           offset = 0;
         }
@@ -24427,15 +24427,15 @@ var require_node = __commonJS({
         this.position = position + bytes;
         return bytes;
       };
-      File4.prototype.chmod = function(perm) {
+      File5.prototype.chmod = function(perm) {
         this.node.chmod(perm);
       };
-      File4.prototype.chown = function(uid, gid) {
+      File5.prototype.chown = function(uid, gid) {
         this.node.chown(uid, gid);
       };
-      return File4;
+      return File5;
     }();
-    exports.File = File3;
+    exports.File = File4;
   }
 });
 
@@ -30540,9 +30540,9 @@ var require_streams = __commonJS({
       }
     }
     try {
-      const { Blob: Blob3 } = require("buffer");
-      if (Blob3 && !Blob3.prototype.stream) {
-        Blob3.prototype.stream = function name2(params) {
+      const { Blob: Blob4 } = require("buffer");
+      if (Blob4 && !Blob4.prototype.stream) {
+        Blob4.prototype.stream = function name2(params) {
           let position = 0;
           const blob = this;
           return new ReadableStream({
@@ -30593,12 +30593,12 @@ async function* toIterator(parts, clone2 = true) {
     }
   }
 }
-var import_streams, POOL_SIZE, _Blob, Blob2, fetch_blob_default;
+var import_streams, POOL_SIZE, _Blob, Blob3, fetch_blob_default;
 var init_fetch_blob = __esm({
   "../../node_modules/.pnpm/fetch-blob@3.2.0/node_modules/fetch-blob/index.js"() {
     import_streams = __toESM(require_streams(), 1);
     POOL_SIZE = 65536;
-    _Blob = class Blob {
+    _Blob = class Blob2 {
       #parts = [];
       #type = "";
       #size = 0;
@@ -30622,7 +30622,7 @@ var init_fetch_blob = __esm({
             part = new Uint8Array(element.buffer.slice(element.byteOffset, element.byteOffset + element.byteLength));
           } else if (element instanceof ArrayBuffer) {
             part = new Uint8Array(element.slice(0));
-          } else if (element instanceof Blob) {
+          } else if (element instanceof Blob2) {
             part = element;
           } else {
             part = encoder.encode(`${element}`);
@@ -30701,7 +30701,7 @@ var init_fetch_blob = __esm({
             relativeStart = 0;
           }
         }
-        const blob = new Blob([], { type: String(type).toLowerCase() });
+        const blob = new Blob2([], { type: String(type).toLowerCase() });
         blob.#size = span;
         blob.#parts = blobParts;
         return blob;
@@ -30718,17 +30718,17 @@ var init_fetch_blob = __esm({
       type: { enumerable: true },
       slice: { enumerable: true }
     });
-    Blob2 = _Blob;
-    fetch_blob_default = Blob2;
+    Blob3 = _Blob;
+    fetch_blob_default = Blob3;
   }
 });
 
 // ../../node_modules/.pnpm/fetch-blob@3.2.0/node_modules/fetch-blob/file.js
-var _File, File2, file_default;
+var _File, File3, file_default;
 var init_file = __esm({
   "../../node_modules/.pnpm/fetch-blob@3.2.0/node_modules/fetch-blob/file.js"() {
     init_fetch_blob();
-    _File = class File extends fetch_blob_default {
+    _File = class File2 extends fetch_blob_default {
       #lastModified = 0;
       #name = "";
       constructor(fileBits, fileName, options = {}) {
@@ -30757,8 +30757,8 @@ var init_file = __esm({
         return !!object && object instanceof fetch_blob_default && /^(File)$/.test(object[Symbol.toStringTag]);
       }
     };
-    File2 = _File;
-    file_default = File2;
+    File3 = _File;
+    file_default = File3;
   }
 });
 
@@ -30776,7 +30776,7 @@ Content-Type: ${v.type || "application/octet-stream"}\r
   c.push(`--${b}--`);
   return new B(c, { type: "multipart/form-data; boundary=" + b });
 }
-var t, i, h, r, m, f, e, x, FormData;
+var t, i, h, r, m, f, e, x, FormData2;
 var init_esm_min = __esm({
   "../../node_modules/.pnpm/formdata-polyfill@4.0.10/node_modules/formdata-polyfill/esm.min.js"() {
     init_fetch_blob();
@@ -30791,7 +30791,7 @@ var init_esm_min = __esm({
         throw new TypeError(`Failed to execute '${n}' on 'FormData': ${e2} arguments required, but only ${a.length} present.`);
       }
     };
-    FormData = class FormData2 {
+    FormData2 = class FormData3 {
       #d = [];
       constructor(...a) {
         if (a.length)
@@ -30957,7 +30957,7 @@ async function toFormData(Body2, ct) {
   let contentType;
   let filename;
   const entryChunks = [];
-  const formData = new FormData();
+  const formData = new FormData2();
   const onPartData = (ui8a) => {
     entryValue += decoder.decode(ui8a, { stream: true });
   };
@@ -65026,6 +65026,20 @@ function deepEquals(objA, objB, map = /* @__PURE__ */ new WeakMap()) {
   return true;
 }
 
+// src/runtime/lib/selection.ts
+function getFieldsForType(selection2, __typename) {
+  let targetSelection = selection2.fields || {};
+  if (selection2.abstractFields && __typename) {
+    const mappedType = selection2.abstractFields.typeMap[__typename];
+    if (mappedType) {
+      targetSelection = selection2.abstractFields.fields[mappedType];
+    } else if (selection2.abstractFields.fields[__typename]) {
+      targetSelection = selection2.abstractFields.fields[__typename];
+    }
+  }
+  return targetSelection;
+}
+
 // src/runtime/cache/gc.ts
 var GarbageCollector = class {
   cache;
@@ -65115,22 +65129,31 @@ var ListManager = class {
   }
   lists = /* @__PURE__ */ new Map();
   listsByField = /* @__PURE__ */ new Map();
-  get(listName, id) {
+  get(listName, id, allLists) {
     const matches = this.lists.get(listName);
     if (!matches || matches.size === 0) {
       return null;
     }
-    const head = [...matches.values()][0];
-    if (matches?.size === 1) {
-      return head;
-    }
-    if (!id) {
-      throw new Error(
-        `Found multiple instances of "${listName}". Please provide a parentID that corresponds to the object containing the field marked with @list or @paginate.`
+    if (allLists) {
+      return new ListCollection(
+        Array.from(matches, ([key, value]) => [...value.lists]).flat()
       );
     }
+    const head = [...matches.values()][0];
     const { recordType } = head.lists[0];
     const parentID = id ? this.cache._internal_unstable.id(recordType || "", id) : this.rootID;
+    if (matches?.size === 1) {
+      if (!id) {
+        return head;
+      }
+      return parentID === Array.from(matches.keys())[0] ? head : null;
+    }
+    if (!id) {
+      console.error(
+        `Found multiple instances of "${listName}". Please provide one of @parentID or @allLists directives to help identify which list you want modify. For more information, visit this guide: https://www.houdinigraphql.com/api/graphql#parentidvalue-string `
+      );
+      return null;
+    }
     return this.lists.get(listName)?.get(parentID);
   }
   remove(listName, id) {
@@ -65239,23 +65262,32 @@ var List = class {
     let insertData = data;
     if (this.connection) {
       insertSelection = {
-        newEntry: {
-          keyRaw: this.key,
-          type: "Connection",
-          fields: {
-            edges: {
-              keyRaw: "edges",
-              type: "ConnectionEdge",
-              update: where === "first" ? "prepend" : "append",
+        fields: {
+          newEntry: {
+            keyRaw: this.key,
+            type: "Connection",
+            selection: {
               fields: {
-                node: {
-                  type: listType,
-                  keyRaw: "node",
-                  fields: {
-                    ...selection2,
-                    __typename: {
-                      keyRaw: "__typename",
-                      type: "String"
+                edges: {
+                  keyRaw: "edges",
+                  type: "ConnectionEdge",
+                  update: where === "first" ? "prepend" : "append",
+                  selection: {
+                    fields: {
+                      node: {
+                        type: listType,
+                        keyRaw: "node",
+                        selection: {
+                          ...selection2,
+                          fields: {
+                            ...selection2.fields,
+                            __typename: {
+                              keyRaw: "__typename",
+                              type: "String"
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -65271,15 +65303,20 @@ var List = class {
       };
     } else {
       insertSelection = {
-        newEntries: {
-          keyRaw: this.key,
-          type: listType,
-          update: where === "first" ? "prepend" : "append",
-          fields: {
-            ...selection2,
-            __typename: {
-              keyRaw: "__typename",
-              type: "String"
+        fields: {
+          newEntries: {
+            keyRaw: this.key,
+            type: listType,
+            update: where === "first" ? "prepend" : "append",
+            selection: {
+              ...selection2,
+              fields: {
+                ...selection2.fields,
+                __typename: {
+                  keyRaw: "__typename",
+                  type: "String"
+                }
+              }
             }
           }
         }
@@ -65339,7 +65376,7 @@ var List = class {
     const subscribers = this.cache._internal_unstable.subscriptions.get(this.recordID, this.key);
     this.cache._internal_unstable.subscriptions.remove(
       targetID,
-      this.connection ? this.selection.edges.fields : this.selection,
+      this.connection ? this.selection.fields.edges.selection : this.selection,
       subscribers,
       variables
     );
@@ -65828,18 +65865,20 @@ var InMemorySubscriptions = class {
     variables,
     parentType
   }) {
-    for (const fieldSelection of Object.values(selection2)) {
-      const { keyRaw, fields, type } = fieldSelection;
+    const __typename = this.cache._internal_unstable.storage.get(parent, "__typename").value;
+    let targetSelection = getFieldsForType(selection2, __typename);
+    for (const fieldSelection of Object.values(targetSelection || {})) {
+      const { keyRaw, selection: innerSelection, type } = fieldSelection;
       const key = evaluateKey(keyRaw, variables);
       this.addFieldSubscription({
         id: parent,
         key,
-        selection: fieldSelection,
+        field: fieldSelection,
         spec,
         parentType: parentType || spec.rootType,
         variables
       });
-      if (fields) {
+      if (innerSelection) {
         const { value: linkedRecord } = this.cache._internal_unstable.storage.get(
           parent,
           key
@@ -65852,7 +65891,7 @@ var InMemorySubscriptions = class {
           this.add({
             parent: child,
             spec,
-            selection: fields,
+            selection: innerSelection,
             variables,
             parentType: type
           });
@@ -65863,7 +65902,7 @@ var InMemorySubscriptions = class {
   addFieldSubscription({
     id,
     key,
-    selection: selection2,
+    field,
     spec,
     parentType,
     variables
@@ -65890,8 +65929,8 @@ var InMemorySubscriptions = class {
     const counts = this.referenceCounts[id][key];
     counts.set(spec.set, (counts.get(spec.set) || 0) + 1);
     this.cache._internal_unstable.lifetimes.resetLifetime(id, key);
-    const { fields, list, filters } = selection2;
-    if (fields && list) {
+    const { selection: selection2, list, filters } = field;
+    if (selection2 && list) {
       this.cache._internal_unstable.lists.add({
         name: list.name,
         connection: list.connection,
@@ -65899,7 +65938,7 @@ var InMemorySubscriptions = class {
         recordType: this.cache._internal_unstable.storage.get(id, "__typename")?.value || parentType,
         listType: list.type,
         key,
-        selection: fields,
+        selection: selection2,
         filters: Object.entries(filters || {}).reduce((acc, [key2, { kind, value }]) => {
           return {
             ...acc,
@@ -65913,22 +65952,24 @@ var InMemorySubscriptions = class {
     parent,
     selection: selection2,
     variables,
-    subscribers
+    subscribers,
+    parentType
   }) {
-    for (const fieldSelection of Object.values(selection2)) {
-      const { keyRaw, fields } = fieldSelection;
+    let targetSelection = getFieldsForType(selection2, parentType);
+    for (const fieldSelection of Object.values(targetSelection)) {
+      const { type: linkedType, keyRaw, selection: innerSelection } = fieldSelection;
       const key = evaluateKey(keyRaw, variables);
       for (const spec of subscribers) {
         this.addFieldSubscription({
           id: parent,
           key,
-          selection: fieldSelection,
+          field: fieldSelection,
           spec,
-          parentType: "asdf",
+          parentType,
           variables
         });
       }
-      if (fields) {
+      if (innerSelection) {
         const { value: link } = this.cache._internal_unstable.storage.get(parent, key);
         const children = !Array.isArray(link) ? [link] : flattenList(link);
         for (const linkedRecord of children) {
@@ -65937,9 +65978,10 @@ var InMemorySubscriptions = class {
           }
           this.addMany({
             parent: linkedRecord,
-            selection: fields,
+            selection: innerSelection,
             variables,
-            subscribers
+            subscribers,
+            parentType: linkedType
           });
         }
       }
@@ -65948,22 +65990,20 @@ var InMemorySubscriptions = class {
   get(id, field) {
     return this.subscribers[id]?.[field] || [];
   }
-  remove(id, fields, targets, variables, visited = []) {
+  remove(id, selection2, targets, variables, visited = []) {
     visited.push(id);
     const linkedIDs = [];
-    for (const selection2 of Object.values(fields)) {
-      const key = evaluateKey(selection2.keyRaw, variables);
+    for (const fieldSelection of Object.values(selection2.fields || {})) {
+      const key = evaluateKey(fieldSelection.keyRaw, variables);
       this.removeSubscribers(id, key, targets);
-      if (!selection2.fields) {
+      if (!fieldSelection.selection?.fields) {
         continue;
-      }
-      if (selection2.list) {
       }
       const { value: previousValue } = this.cache._internal_unstable.storage.get(id, key);
       const links = !Array.isArray(previousValue) ? [previousValue] : flattenList(previousValue);
       for (const link of links) {
         if (link !== null) {
-          linkedIDs.push([link, selection2.fields]);
+          linkedIDs.push([link, fieldSelection.selection || {}]);
         }
       }
     }
@@ -66074,8 +66114,8 @@ var Cache2 = class {
       variables
     );
   }
-  list(name2, parentID) {
-    const handler = this._internal_unstable.lists.get(name2, parentID);
+  list(name2, parentID, allLists) {
+    const handler = this._internal_unstable.lists.get(name2, parentID, allLists);
     if (!handler) {
       throw new Error(
         `Cannot find list with name: ${name2}${parentID ? " under parent " + parentID : ""}. Is it possible that the query is not mounted?`
@@ -66119,7 +66159,7 @@ var CacheInternal = class {
     this.cache = cache;
     this.lifetimes = lifetimes;
     try {
-      this._disabled = process.env.TEST !== "true";
+      this._disabled = process.env.HOUDINI_TEST !== "true";
     } catch {
       this._disabled = typeof globalThis.window === "undefined";
     }
@@ -66141,8 +66181,9 @@ var CacheInternal = class {
     if (this._disabled) {
       return [];
     }
+    let targetSelection = getFieldsForType(selection2, data["__typename"]);
     for (const [field, value] of Object.entries(data)) {
-      if (!selection2 || !selection2[field]) {
+      if (!selection2 || !targetSelection[field]) {
         throw new Error(
           "Could not find field listing in selection for " + field + " @ " + JSON.stringify(selection2)
         );
@@ -66150,11 +66191,11 @@ var CacheInternal = class {
       let {
         type: linkedType,
         keyRaw,
-        fields,
+        selection: fieldSelection,
         operations,
         abstract: isAbstract,
         update
-      } = selection2[field];
+      } = targetSelection[field];
       const key = evaluateKey(keyRaw, variables);
       const currentSubscribers = this.subscriptions.get(parent, key);
       const { value: previousValue, displayLayers } = this.storage.get(parent, key);
@@ -66162,7 +66203,7 @@ var CacheInternal = class {
       if (displayLayer) {
         this.lifetimes.resetLifetime(parent, key);
       }
-      if (!fields) {
+      if (!fieldSelection) {
         let newValue = value;
         if (Array.isArray(value) && applyUpdates && update) {
           if (update === "append") {
@@ -66182,7 +66223,7 @@ var CacheInternal = class {
         }
         const previousLinks = flattenList([previousValue]);
         for (const link of previousLinks) {
-          this.subscriptions.remove(link, fields, currentSubscribers, variables);
+          this.subscriptions.remove(link, fieldSelection, currentSubscribers, variables);
         }
         layer.writeLink(parent, key, null);
         toNotify.push(...currentSubscribers);
@@ -66208,30 +66249,31 @@ var CacheInternal = class {
           if (previousValue && typeof previousValue === "string") {
             this.subscriptions.remove(
               previousValue,
-              fields,
+              fieldSelection,
               currentSubscribers,
               variables
             );
           }
           this.subscriptions.addMany({
             parent: linkedID,
-            selection: fields,
+            selection: fieldSelection,
             subscribers: currentSubscribers,
-            variables
+            variables,
+            parentType: linkedType
           });
           toNotify.push(...currentSubscribers);
         }
         if (linkedID) {
           this.writeSelection({
             root,
-            selection: fields,
+            selection: fieldSelection,
             parent: linkedID,
             data: value,
             variables,
             toNotify,
             applyUpdates,
             layer,
-            forceNotify: true
+            forceNotify
           });
         }
       } else if (Array.isArray(value) && (typeof previousValue === "undefined" || Array.isArray(previousValue))) {
@@ -66260,7 +66302,7 @@ var CacheInternal = class {
           key,
           linkedType,
           variables,
-          fields,
+          fields: fieldSelection,
           layer,
           forceNotify
         });
@@ -66310,7 +66352,7 @@ var CacheInternal = class {
           if (linkedIDs.includes(lostID) || !lostID) {
             continue;
           }
-          this.subscriptions.remove(lostID, fields, currentSubscribers, variables);
+          this.subscriptions.remove(lostID, fieldSelection, currentSubscribers, variables);
         }
         if (contentChanged || oldIDs.length === 0 && newIDs.length === 0) {
           layer.writeLink(parent, key, linkedIDs);
@@ -66321,9 +66363,10 @@ var CacheInternal = class {
           }
           this.subscriptions.addMany({
             parent: id,
-            selection: fields,
+            selection: fieldSelection,
             subscribers: currentSubscribers,
-            variables
+            variables,
+            parentType: linkedType
           });
         }
       }
@@ -66340,15 +66383,20 @@ var CacheInternal = class {
             parentID = id;
           }
         }
-        if (operation.list && !this.lists.get(operation.list, parentID)) {
+        if (operation.list && !this.lists.get(operation.list, parentID, operation.target === "all")) {
           continue;
         }
         const targets = Array.isArray(value) ? value : [value];
         for (const target of targets) {
-          if (operation.action === "insert" && target instanceof Object && fields && operation.list) {
-            this.cache.list(operation.list, parentID).when(operation.when).addToList(fields, target, variables, operation.position || "last");
-          } else if (operation.action === "remove" && target instanceof Object && fields && operation.list) {
-            this.cache.list(operation.list, parentID).when(operation.when).remove(target, variables);
+          if (operation.action === "insert" && target instanceof Object && fieldSelection && operation.list) {
+            this.cache.list(operation.list, parentID, operation.target === "all").when(operation.when).addToList(
+              fieldSelection,
+              target,
+              variables,
+              operation.position || "last"
+            );
+          } else if (operation.action === "remove" && target instanceof Object && fieldSelection && operation.list) {
+            this.cache.list(operation.list, parentID, operation.target === "all").when(operation.when).remove(target, variables);
           } else if (operation.action === "delete" && operation.type) {
             if (typeof target !== "string") {
               throw new Error("Cannot delete a record with a non-string ID");
@@ -66358,8 +66406,13 @@ var CacheInternal = class {
               continue;
             }
             this.cache.delete(targetID);
-          } else if (operation.action === "toggle" && target instanceof Object && fields && operation.list) {
-            this.cache.list(operation.list, parentID).when(operation.when).toggleElement(fields, target, variables, operation.position || "last");
+          } else if (operation.action === "toggle" && target instanceof Object && fieldSelection && operation.list) {
+            this.cache.list(operation.list, parentID, operation.target === "all").when(operation.when).toggleElement(
+              fieldSelection,
+              target,
+              variables,
+              operation.position || "last"
+            );
           }
         }
       }
@@ -66379,9 +66432,12 @@ var CacheInternal = class {
     let hasData = false;
     let partial = false;
     let cascadeNull = false;
-    for (const [attributeName, { type, keyRaw, fields, nullable, list }] of Object.entries(
-      selection2
-    )) {
+    const typename = this.storage.get(parent, "__typename").value;
+    let targetSelection = getFieldsForType(selection2, typename);
+    for (const [
+      attributeName,
+      { type, keyRaw, selection: fieldSelection, nullable, list }
+    ] of Object.entries(targetSelection)) {
       const key = evaluateKey(keyRaw, variables);
       const { value } = this.storage.get(parent, key);
       let nextStep = stepsFromConnection;
@@ -66404,7 +66460,7 @@ var CacheInternal = class {
         if (typeof value !== "undefined") {
           hasData = true;
         }
-      } else if (!fields) {
+      } else if (!fieldSelection) {
         const fnUnmarshal = this.config?.scalars?.[type]?.unmarshal;
         if (fnUnmarshal) {
           target[attributeName] = fnUnmarshal(value);
@@ -66414,7 +66470,7 @@ var CacheInternal = class {
         hasData = true;
       } else if (Array.isArray(value)) {
         const listValue = this.hydrateNestedList({
-          fields,
+          fields: fieldSelection,
           variables,
           linkedList: value,
           stepsFromConnection: nextStep
@@ -66429,7 +66485,7 @@ var CacheInternal = class {
       } else {
         const objectFields = this.getSelection({
           parent: value,
-          selection: fields,
+          selection: fieldSelection,
           variables,
           stepsFromConnection: nextStep
         });
@@ -66608,6 +66664,14 @@ var CompiledMutationKind = "HoudiniMutation" /* Mutation */;
 var CompiledQueryKind = "HoudiniQuery" /* Query */;
 var CompiledSubscriptionKind = "HoudiniSubscription" /* Subscription */;
 
+// src/lib/constants.ts
+var siteURL = "https://houdinigraphql.com";
+var houdini_mode = {
+  get is_testing() {
+    return process.env.HOUDINI_TEST === "true";
+  }
+};
+
 // src/lib/error.ts
 var HoudiniError = class extends Error {
   filepath = null;
@@ -66631,6 +66695,8 @@ var HoudiniError = class extends Error {
 var fs_exports = {};
 __export(fs_exports, {
   access: () => access,
+  copyFile: () => copyFile,
+  copyFileSync: () => copyFileSync,
   existsSync: () => existsSync,
   glob: () => glob,
   mkdir: () => mkdir,
@@ -66700,8 +66766,50 @@ function importPath(target) {
 }
 
 // src/lib/fs.ts
+function copyFileSync(src, dest) {
+  if (houdini_mode.is_testing) {
+    try {
+      if (src.includes("build/runtime") || dest.includes("build/runtime")) {
+        import_fs_extra.default.copyFileSync(src, dest);
+        return;
+      }
+      import_memfs.fs.copyFileSync(src, dest);
+      return;
+    } catch (e2) {
+      return null;
+    }
+  }
+  try {
+    import_fs_extra.default.copyFileSync(src, dest);
+    return;
+  } catch (e2) {
+  }
+  return null;
+}
+async function copyFile(src, dest) {
+  if (houdini_mode.is_testing) {
+    try {
+      if (src.includes("build/runtime") || dest.includes("build/runtime")) {
+        await import_promises.default.copyFile(src, dest);
+        return;
+      }
+      await import_memfs.fs.copyFile(src, dest, (err) => {
+        throw err;
+      });
+      return;
+    } catch (e2) {
+      return null;
+    }
+  }
+  try {
+    await import_promises.default.copyFile(src, dest);
+    return;
+  } catch (e2) {
+  }
+  return null;
+}
 async function readFile(filepath) {
-  if (process.env.NODE_ENV === "test") {
+  if (houdini_mode.is_testing) {
     try {
       if (filepath.includes("build/runtime")) {
         return await import_promises.default.readFile(filepath, "utf-8");
@@ -66718,7 +66826,7 @@ async function readFile(filepath) {
   return null;
 }
 function readFileSync(filepath) {
-  if (process.env.NODE_ENV === "test") {
+  if (houdini_mode.is_testing) {
     try {
       if (filepath.includes("build/runtime")) {
         return import_fs_extra.default.readFileSync(filepath, "utf-8");
@@ -66739,13 +66847,13 @@ async function writeFile(filepath, data) {
   if (data === existingFileData) {
     return;
   }
-  if (process.env.NODE_ENV === "test") {
+  if (houdini_mode.is_testing) {
     return import_memfs.fs.writeFileSync(filepath, data);
   }
   return await import_promises.default.writeFile(filepath, data, "utf8");
 }
 async function access(filepath) {
-  if (process.env.NODE_ENV !== "test") {
+  if (!houdini_mode.is_testing) {
     return await import_promises.default.access(filepath);
   }
   if (filepath.includes("build/runtime")) {
@@ -66754,25 +66862,25 @@ async function access(filepath) {
   return import_memfs.fs.statSync(filepath);
 }
 async function mkdirp(filepath) {
-  if (process.env.NODE_ENV !== "test") {
+  if (!houdini_mode.is_testing) {
     return await import_fs_extra.default.mkdirp(filepath);
   }
   return import_memfs.fs.mkdirpSync(filepath);
 }
 async function mkdirpSync(filepath) {
-  if (process.env.NODE_ENV !== "test") {
+  if (!houdini_mode.is_testing) {
     return import_fs_extra.default.mkdirpSync(filepath);
   }
   return import_memfs.fs.mkdirpSync(filepath);
 }
 async function mkdir(filepath) {
-  if (process.env.NODE_ENV !== "test") {
+  if (!houdini_mode.is_testing) {
     return await import_promises.default.mkdir(filepath);
   }
   return import_memfs.fs.mkdirSync(filepath);
 }
 async function rmdir(filepath) {
-  if (process.env.NODE_ENV !== "test") {
+  if (!houdini_mode.is_testing) {
     return await import_promises.default.rm(filepath, {
       recursive: true
     });
@@ -66780,7 +66888,7 @@ async function rmdir(filepath) {
   return await (0, import_util.promisify)(import_memfs.fs.rmdir)(filepath);
 }
 async function stat(filepath) {
-  if (process.env.NODE_ENV !== "test") {
+  if (!houdini_mode.is_testing) {
     return await import_promises.default.stat(filepath);
   }
   if (filepath.includes("build/runtime")) {
@@ -66789,13 +66897,13 @@ async function stat(filepath) {
   return import_memfs.fs.statSync(filepath);
 }
 function existsSync(dirPath) {
-  if (process.env.NODE_ENV !== "test") {
+  if (!houdini_mode.is_testing) {
     return import_fs_extra.default.existsSync(dirPath);
   }
   return import_memfs.fs.existsSync(dirPath);
 }
 async function readdir(filepath) {
-  if (process.env.NODE_ENV !== "test") {
+  if (!houdini_mode.is_testing) {
     return await import_promises.default.readdir(filepath);
   }
   if (filepath.includes("build/runtime")) {
@@ -66808,7 +66916,7 @@ async function readdir(filepath) {
   }
 }
 async function remove(filepath) {
-  if (process.env.NODE_ENV !== "test") {
+  if (!houdini_mode.is_testing) {
     return await import_promises.default.rm(filepath);
   }
   return import_memfs.vol.rmSync(filepath);
@@ -66982,7 +67090,7 @@ var Body = class {
     } else if (ArrayBuffer.isView(body)) {
       body = import_node_buffer.Buffer.from(body.buffer, body.byteOffset, body.byteLength);
     } else if (body instanceof import_node_stream.default) {
-    } else if (body instanceof FormData) {
+    } else if (body instanceof FormData2) {
       body = formDataToBlob(body);
       boundary = body.type.split("=")[1];
     } else {
@@ -67022,7 +67130,7 @@ var Body = class {
   async formData() {
     const ct = this.headers.get("content-type");
     if (ct.startsWith("application/x-www-form-urlencoded")) {
-      const formData = new FormData();
+      const formData = new FormData2();
       const parameters = new URLSearchParams(await this.text());
       for (const [name2, value] of parameters) {
         formData.append(name2, value);
@@ -67148,7 +67256,7 @@ var extractContentType = (body, request) => {
   if (import_node_buffer.Buffer.isBuffer(body) || import_node_util.types.isAnyArrayBuffer(body) || ArrayBuffer.isView(body)) {
     return null;
   }
-  if (body instanceof FormData) {
+  if (body instanceof FormData2) {
     return `multipart/form-data; boundary=${request[INTERNALS].boundary}`;
   }
   if (body && typeof body.getBoundary === "function") {
@@ -68102,6 +68210,8 @@ var Config = class {
   cacheBufferSize;
   defaultCachePolicy;
   defaultPartial;
+  internalListPosition;
+  defaultListTarget = null;
   definitionsFolder;
   newSchema = "";
   newDocuments = "";
@@ -68133,6 +68243,8 @@ var Config = class {
       definitionsPath,
       defaultCachePolicy = "CacheOrNetwork" /* CacheOrNetwork */,
       defaultPartial = false,
+      defaultListPosition = "append",
+      defaultListTarget = null,
       defaultKeys,
       types: types15 = {},
       logLevel,
@@ -68155,7 +68267,11 @@ var Config = class {
       logLevel = LogLevel.Summary;
     }
     this.schemaPath = schemaPath;
-    this.apiUrl = apiUrl;
+    if (apiUrl && apiUrl.startsWith("env:")) {
+      this.apiUrl = process.env[apiUrl.slice("env:".length)];
+    } else {
+      this.apiUrl = apiUrl;
+    }
     this.filepath = filepath;
     this.exclude = Array.isArray(exclude) ? exclude : [exclude];
     this.module = module2;
@@ -68166,6 +68282,8 @@ var Config = class {
     this.cacheBufferSize = cacheBufferSize;
     this.defaultCachePolicy = defaultCachePolicy;
     this.defaultPartial = defaultPartial;
+    this.internalListPosition = defaultListPosition === "append" ? "last" : "first";
+    this.defaultListTarget = defaultListTarget;
     this.definitionsFolder = definitionsPath;
     this.logLevel = (logLevel || LogLevel.Summary).toLowerCase();
     this.disableMasking = disableMasking;
@@ -68282,7 +68400,7 @@ var Config = class {
     return locationFound;
   }
   get runtimeSource() {
-    const relative2 = process.env.TEST ? join2(currentDir, "..", "..") : this.findModule();
+    const relative2 = houdini_mode.is_testing ? join2(currentDir, "..", "..") : this.findModule();
     const which = this.module === "esm" ? "esm" : "cjs";
     return resolve(relative2, "build", `runtime-${which}`);
   }
@@ -68360,7 +68478,7 @@ var Config = class {
     return join2(this.pluginDirectory(name2), "runtime");
   }
   pluginDirectory(name2) {
-    return process.env.TEST ? resolve("../../../", name2) : join2(this.rootDir, "plugins", name2);
+    return houdini_mode.is_testing ? resolve("../../../", name2) : join2(this.rootDir, "plugins", name2);
   }
   get houdiniDirective() {
     return "houdini";
@@ -68379,6 +68497,9 @@ var Config = class {
   }
   get listDirectiveParentIDArg() {
     return "parentID";
+  }
+  get listAllListsDirective() {
+    return "allLists";
   }
   get listNameArg() {
     return "name";
@@ -68461,6 +68582,7 @@ var Config = class {
       this.listPrependDirective,
       this.listAppendDirective,
       this.listDirectiveParentIDArg,
+      this.listAllListsDirective,
       this.whenDirective,
       this.whenNotDirective,
       this.argumentsDirective,
@@ -68822,9 +68944,6 @@ function ensureImports({
   return Array.isArray(importID) ? toImport : toImport[0];
 }
 
-// src/lib/constants.ts
-var siteURL = "https://houdinigraphql.com";
-
 // src/lib/cleanupFiles.ts
 async function cleanupFiles(pathFolder, listOfObj) {
   const listFile = await readdir(pathFolder);
@@ -69034,13 +69153,17 @@ function flattenSelections({
   config: config3,
   filepath,
   selections,
-  fragmentDefinitions
+  fragmentDefinitions,
+  applyFragments,
+  ignoreMaskDisable
 }) {
   const fields = new FieldCollection({
     config: config3,
     filepath,
     selections,
-    fragmentDefinitions
+    fragmentDefinitions,
+    applyFragments,
+    ignoreMaskDisable: !!ignoreMaskDisable
   });
   return fields.toSelectionSet();
 }
@@ -69051,9 +69174,13 @@ var FieldCollection = class {
   fields;
   inlineFragments;
   fragmentSpreads;
+  applyFragments;
+  ignoreMaskDisable;
   constructor(args) {
     this.config = args.config;
     this.fragmentDefinitions = args.fragmentDefinitions;
+    this.applyFragments = args.applyFragments;
+    this.ignoreMaskDisable = args.ignoreMaskDisable;
     this.fields = {};
     this.inlineFragments = {};
     this.fragmentSpreads = {};
@@ -69082,16 +69209,7 @@ var FieldCollection = class {
       }
     }
     if (selection2.kind === "InlineFragment" && selection2.typeCondition) {
-      const key = selection2.typeCondition.name.value;
-      if (!this.inlineFragments[key]) {
-        this.inlineFragments[key] = {
-          astNode: selection2,
-          selection: this.empty()
-        };
-      }
-      for (const subselect of selection2.selectionSet?.selections || []) {
-        this.inlineFragments[key].selection.add(subselect);
-      }
+      this.walkInlineFragment(selection2);
       return;
     }
     if (selection2.kind === "FragmentSpread") {
@@ -69106,7 +69224,10 @@ var FieldCollection = class {
       if (maskArgument?.value.kind === "BooleanValue") {
         includeFragments = !maskArgument.value.value;
       }
-      if (!includeFragments) {
+      if (this.ignoreMaskDisable) {
+        includeFragments = true;
+      }
+      if (!includeFragments || !this.applyFragments) {
         return;
       }
       const definition = this.fragmentDefinitions[selection2.name.value];
@@ -69116,9 +69237,20 @@ var FieldCollection = class {
           message: "Could not find referenced fragment definition: " + selection2.name.value
         });
       }
-      for (const subselect of definition.selectionSet.selections) {
-        this.add(subselect);
-      }
+      this.add({
+        kind: "InlineFragment",
+        typeCondition: {
+          kind: "NamedType",
+          name: {
+            kind: "Name",
+            value: definition.typeCondition.name.value
+          }
+        },
+        selectionSet: {
+          kind: "SelectionSet",
+          selections: [...definition.selectionSet.selections]
+        }
+      });
     }
   }
   toSelectionSet() {
@@ -69134,12 +69266,30 @@ var FieldCollection = class {
       })
     ).concat(Object.values(this.fragmentSpreads));
   }
+  walkInlineFragment(selection2) {
+    const key = selection2.typeCondition.name.value;
+    if (!this.inlineFragments[key]) {
+      this.inlineFragments[key] = {
+        astNode: selection2,
+        selection: this.empty()
+      };
+    }
+    for (const subselect of selection2.selectionSet.selections || []) {
+      if (subselect.kind !== "InlineFragment" || !subselect.typeCondition) {
+        this.inlineFragments[key].selection.add(subselect);
+        continue;
+      }
+      this.walkInlineFragment(subselect);
+    }
+  }
   empty() {
     return new FieldCollection({
       config: this.config,
       fragmentDefinitions: this.fragmentDefinitions,
       selections: [],
-      filepath: this.filepath
+      filepath: this.filepath,
+      applyFragments: this.applyFragments,
+      ignoreMaskDisable: this.ignoreMaskDisable
     });
   }
 };
@@ -69465,7 +69615,8 @@ function operationObject({
 }) {
   let parentID;
   let parentKind = "String";
-  let position = "last";
+  let position = config3.internalListPosition;
+  let allLists = config3.defaultListTarget ?? void 0;
   let operationWhen;
   const internalDirectives = selection2.directives?.filter(
     (directive) => config3.isInternalDirective(directive)
@@ -69477,15 +69628,21 @@ function operationObject({
     const append = internalDirectives.find(
       ({ name: name2 }) => name2.value === config3.listAppendDirective
     );
-    const when = internalDirectives.find(({ name: name2 }) => name2.value === "when");
-    const when_not = internalDirectives.find(({ name: name2 }) => name2.value === "when_not");
+    if (append) {
+      position = "last";
+    }
+    if (prepend) {
+      position = "first";
+    }
+    const allListsDirective = internalDirectives.find(
+      ({ name: name2 }) => name2.value === config3.listAllListsDirective
+    );
     let parent = internalDirectives.find(
       ({ name: name2 }) => name2.value === config3.listParentDirective
     );
-    if (append && prepend) {
-      throw new HoudiniError({ filepath, message: "you have both applied" });
-    }
-    position = prepend ? "first" : "last";
+    allLists = allListsDirective ? "all" : void 0;
+    const when = internalDirectives.find(({ name: name2 }) => name2.value === "when");
+    const when_not = internalDirectives.find(({ name: name2 }) => name2.value === "when_not");
     let parentIDArg = parent?.arguments?.find((argument) => argument.name.value === "value");
     if (!parentIDArg) {
       parentIDArg = (append || prepend)?.arguments?.find(
@@ -69547,7 +69704,10 @@ function operationObject({
     operation.type = type;
   }
   if (operationKind === "insert" || operationKind === "toggle") {
-    operation.position = position || "last";
+    operation.position = position;
+  }
+  if (operationKind === "insert" && allLists) {
+    operation.target = "all";
   }
   if (parentID) {
     operation.parentID = {
@@ -69671,12 +69831,15 @@ async function paginate(config3, documents) {
             {}
           ) || {};
           let newVariables = Object.fromEntries(
-            Object.entries(flags).filter(([, spec]) => spec.enabled).map(([fieldName, spec]) => [
+            Object.entries(flags).filter(
+              ([, spec]) => spec.enabled && spec.variableName === void 0
+            ).map(([fieldName, spec]) => [
               fieldName,
               staticVariableDefinition(
                 fieldName,
                 spec.type,
-                spec.defaultValue
+                spec.defaultValue,
+                spec.variableName
               )
             ])
           );
@@ -69815,7 +69978,7 @@ async function paginate(config3, documents) {
               kind: graphql9.Kind.NAME,
               value: refetchQueryName
             },
-            operation: graphql9.OperationTypeNode.QUERY,
+            operation: "query",
             variableDefinitions: paginationArgs.map(
               (arg) => ({
                 kind: graphql9.Kind.VARIABLE_DEFINITION,
@@ -69928,8 +70091,11 @@ function replaceArgumentsWithVariables(args, flags) {
       const oldValue = arg.value.value;
       flags[arg.name.value].defaultValue = spec.type === "Int" ? parseInt(oldValue) : oldValue;
     }
+    if (arg.value.kind === "Variable") {
+      flags[arg.name.value].variableName = arg.value.name.value;
+    }
     seenArgs[arg.name.value] = true;
-    return variableAsArgument(arg.name.value);
+    return variableAsArgument(arg.name.value, flags[arg.name.value].variableName);
   });
   for (const name2 of Object.keys(flags)) {
     const spec = flags[name2];
@@ -69946,7 +70112,7 @@ function replaceArgumentsWithVariables(args, flags) {
   }
   return newArgs;
 }
-function variableAsArgument(name2) {
+function variableAsArgument(name2, variable) {
   return {
     kind: graphql9.Kind.ARGUMENT,
     name: {
@@ -69957,12 +70123,12 @@ function variableAsArgument(name2) {
       kind: graphql9.Kind.VARIABLE,
       name: {
         kind: graphql9.Kind.NAME,
-        value: name2
+        value: variable ?? name2
       }
     }
   };
 }
-function staticVariableDefinition(name2, type, defaultValue) {
+function staticVariableDefinition(name2, type, defaultValue, variableName) {
   return {
     kind: graphql9.Kind.VARIABLE_DEFINITION,
     type: {
@@ -69976,7 +70142,7 @@ function staticVariableDefinition(name2, type, defaultValue) {
       kind: graphql9.Kind.VARIABLE,
       name: {
         kind: graphql9.Kind.NAME,
-        value: name2
+        value: variableName ?? name2
       }
     },
     defaultValue: !defaultValue ? void 0 : {
@@ -70473,6 +70639,8 @@ function selection({
   markEdges
 }) {
   let object = {};
+  const typeMap = {};
+  const abstractTypes = [];
   for (const field of selections) {
     if (field.kind === "FragmentSpread" && includeFragments) {
       const fragmentDefinition = document.document.definitions.find(
@@ -70499,20 +70667,68 @@ function selection({
         })
       );
     } else if (field.kind === "InlineFragment") {
-      object = deepMerge(
-        filepath,
-        object,
-        selection({
-          config: config3,
+      if (!field.typeCondition || field.typeCondition.name.value === rootType) {
+        object.fields = deepMerge(
           filepath,
-          rootType: field.typeCondition?.name.value || rootType,
-          operations,
-          selections: field.selectionSet.selections,
-          path: path2,
-          includeFragments,
-          document
-        })
-      );
+          object.fields || {},
+          selection({
+            config: config3,
+            filepath,
+            rootType: field.typeCondition?.name.value || rootType,
+            operations,
+            selections: field.selectionSet.selections,
+            path: path2,
+            includeFragments,
+            document
+          }).fields || {}
+        );
+      } else {
+        if (!object.abstractFields) {
+          object.abstractFields = {
+            fields: {},
+            typeMap: {}
+          };
+        }
+        const parentType = config3.schema.getType(rootType);
+        const typeConditionName = field.typeCondition.name.value;
+        const typeCondition = config3.schema.getType(typeConditionName);
+        const possibleTypes = [];
+        if (!graphql12.isAbstractType(typeCondition)) {
+        } else if (graphql12.isAbstractType(parentType)) {
+          const possibleParentTypes = config3.schema.getPossibleTypes(parentType).map((type) => type.name);
+          for (const possible of config3.schema.getPossibleTypes(typeCondition)) {
+            if (possibleParentTypes.includes(possible.name)) {
+              possibleTypes.push(possible.name);
+            }
+          }
+        } else {
+          possibleTypes.push(rootType);
+        }
+        if (possibleTypes.length > 0) {
+          for (const type of possibleTypes) {
+            const existing = typeMap[type];
+            if (!existing || !existing.includes(type)) {
+              typeMap[type] = [typeConditionName].concat(existing || []);
+            }
+            if (!abstractTypes.includes(typeConditionName)) {
+              abstractTypes.push(typeConditionName);
+            }
+          }
+        }
+        object.abstractFields.fields = {
+          ...object.abstractFields.fields,
+          [field.typeCondition.name.value]: selection({
+            config: config3,
+            filepath,
+            rootType: field.typeCondition?.name.value || rootType,
+            operations,
+            selections: field.selectionSet.selections,
+            path: path2,
+            includeFragments,
+            document
+          }).fields
+        };
+      }
     } else if (field.kind === "Field") {
       const type = config3.schema.getType(rootType);
       if (!type) {
@@ -70570,7 +70786,7 @@ function selection({
       }
       if (field.selectionSet) {
         const edgesMark = paginated && document.refetch?.method === "cursor" ? document.refetch.update : markEdges;
-        fieldObj.fields = selection({
+        fieldObj.selection = selection({
           config: config3,
           filepath,
           rootType: typeName,
@@ -70594,11 +70810,49 @@ function selection({
       if (graphql12.isInterfaceType(fieldType) || graphql12.isUnionType(fieldType)) {
         fieldObj.abstract = true;
       }
-      object[attributeName] = deepMerge(
-        filepath,
-        fieldObj,
-        object[attributeName] || {}
-      );
+      object.fields = {
+        ...object.fields,
+        [attributeName]: fieldObj
+      };
+    }
+  }
+  if (Object.keys(object.fields || {}).length > 0 && object.abstractFields && Object.keys(object.abstractFields.fields).length > 0) {
+    for (const [typeName, possibles] of Object.entries(typeMap)) {
+      let overlap = false;
+      for (const possible of possibles) {
+        if (object.abstractFields.fields[typeName]) {
+          object.abstractFields.fields[typeName] = deepMerge(
+            filepath,
+            object.abstractFields.fields[typeName] || {},
+            object.abstractFields.fields[possible]
+          );
+          overlap = true;
+        }
+      }
+      if (overlap) {
+        delete typeMap[typeName];
+      }
+    }
+    for (const [type, options] of Object.entries(typeMap)) {
+      if (options.length > 1) {
+        object.abstractFields.fields[type] = deepMerge(
+          filepath,
+          ...options.map((opt) => object.abstractFields.fields[opt] || {})
+        );
+        delete typeMap[type];
+      }
+    }
+    for (const [type, sel] of Object.entries(object.abstractFields?.fields || {})) {
+      object.abstractFields.fields[type] = deepMerge(filepath, sel || {}, object.fields);
+    }
+    for (const [type, options] of Object.entries(typeMap)) {
+      object.abstractFields.typeMap[type] = options[0];
+    }
+    const usedTypes = Object.values(object.abstractFields.typeMap);
+    for (const type of abstractTypes) {
+      if (!usedTypes.includes(type)) {
+        delete object.abstractFields.fields[type];
+      }
     }
   }
   return object;
@@ -70733,6 +70987,22 @@ function artifactGenerator(stats) {
             selectionSet = matchingFragment.selectionSet;
           }
           const inputs = operations[0]?.variableDefinitions;
+          const mergedSelection = flattenSelections({
+            config: config3,
+            filepath: doc.filename,
+            selections: selectionSet.selections,
+            fragmentDefinitions: doc.document.definitions.filter(
+              (definition) => definition.kind === "FragmentDefinition"
+            ).reduce(
+              (prev, definition) => ({
+                ...prev,
+                [definition.name.value]: definition
+              }),
+              {}
+            ),
+            ignoreMaskDisable: docKind === "HoudiniQuery",
+            applyFragments: docKind !== "HoudiniFragment"
+          });
           const artifact = {
             name: name2,
             kind: docKind,
@@ -70744,7 +71014,7 @@ function artifactGenerator(stats) {
               config: config3,
               filepath: doc.filename,
               rootType,
-              selections: selectionSet.selections,
+              selections: mergedSelection,
               operations: operationsByPath(
                 config3,
                 doc.filename,
@@ -70835,7 +71105,7 @@ async function runtimeGenerator(config3) {
   ]);
 }
 async function generatePluginRuntime(config3, plugin) {
-  if (process.env.TEST) {
+  if (houdini_mode.is_testing) {
     return;
   }
   const source = path_exports.join(
@@ -71040,6 +71310,17 @@ function inlineType({
           continue;
         }
         const possibleParents = config3.schema.getPossibleTypes(type).map((t2) => t2.name);
+        const freeSelections = [];
+        const typeSpecificSelections = {};
+        for (const node of selection2.selectionSet.selections) {
+          if (node.kind !== "InlineFragment") {
+            freeSelections.push(node);
+          } else if (node.typeCondition) {
+            typeSpecificSelections[node.typeCondition.name.value] = node.selectionSet.selections;
+          } else {
+            freeSelections.push(...node.selectionSet.selections);
+          }
+        }
         for (const possibleType of config3.schema.getPossibleTypes(fragmentType)) {
           if (!possibleParents.includes(possibleType.name)) {
             continue;
@@ -71047,7 +71328,12 @@ function inlineType({
           if (!inlineFragments[possibleType.name]) {
             inlineFragments[possibleType.name] = [];
           }
-          inlineFragments[possibleType.name].push(...selection2.selectionSet.selections);
+          inlineFragments[possibleType.name].push(...freeSelections);
+          if (typeSpecificSelections[possibleType.name]) {
+            inlineFragments[possibleType.name].push(
+              ...typeSpecificSelections[possibleType.name]
+            );
+          }
         }
       } else if (selection2.kind === "InlineFragment" && !selection2.typeCondition) {
         selectedFields.push(...selection2.selectionSet.selections);
@@ -71059,12 +71345,7 @@ function inlineType({
       ...(selectedFields || []).filter(
         (field) => field.kind === "Field"
       ).map((selection2) => {
-        const { type: type2, field } = selectionTypeInfo(
-          config3.schema,
-          filepath,
-          rootObj,
-          selection2
-        );
+        const { field } = selectionTypeInfo(config3.schema, filepath, rootObj, selection2);
         const attributeName = selection2.alias?.value || selection2.name.value;
         let attributeType = inlineType({
           config: config3,
@@ -71263,7 +71544,8 @@ async function typescriptGenerator(config3, docs) {
         config: config3,
         filepath: filename,
         selections: definition.selectionSet.selections,
-        fragmentDefinitions
+        fragmentDefinitions,
+        applyFragments: definition.kind === "OperationDefinition"
       });
       if (definition?.kind === "OperationDefinition") {
         await generateOperationTypeDefs(
@@ -71784,6 +72066,11 @@ directive @${config3.listPrependDirective}(
 	@${config3.listAppendDirective} is used to tell the runtime to add the result to the start of the list
 """
 directive @${config3.listAppendDirective}(${config3.listDirectiveParentIDArg}: ID) on FRAGMENT_SPREAD
+
+"""
+	@${config3.listAllListsDirective} is used to tell the runtime to add the result to all list
+"""
+directive @${config3.listAllListsDirective} on FRAGMENT_SPREAD
 
 """
 	@${config3.listParentDirective} is used to provide a parentID without specifying position or in situations
@@ -72316,6 +72603,27 @@ async function typeCheck(config3, docs) {
           ),
           targetField.selectionSet
         );
+        const missingIDFields = config3.keyFieldsForType(type.name).filter((fieldName) => !type.getFields()[fieldName]);
+        if (missingIDFields.length > 0) {
+          if (error) {
+            errors.push(
+              new HoudiniError({
+                filepath: filename,
+                message: error
+              })
+            );
+          } else {
+            errors.push(
+              new HoudiniError({
+                filepath: filename,
+                message: `@${config3.listDirective} can only be applied to types with the necessary id fields: ${missingIDFields.join(
+                  ", "
+                )}.`
+              })
+            );
+          }
+          return;
+        }
         lists.push(listName);
         listTypes.push(type.name);
         if (!needsParent) {
@@ -72343,6 +72651,7 @@ async function typeCheck(config3, docs) {
       listTypes,
       fragments
     }),
+    checkMutationOperation(config3),
     nodeDirectives(config3, [config3.paginateDirective]),
     knownArguments(config3),
     validateFragmentArguments(config3, filepath, fragments),
@@ -72401,24 +72710,33 @@ var validateLists = ({
       if (directive) {
         return;
       }
+      let parentIdFound = false;
       directive = node.directives?.find(({ name: name2 }) => [
         [config3.listPrependDirective, config3.listAppendDirective].includes(name2.value)
       ]);
-      if (!directive) {
-        ctx.reportError(
-          new graphql25.GraphQLError("parentID is required for this list fragment")
+      if (directive) {
+        let parentArg = directive.arguments?.find(
+          (arg) => arg.name.value === config3.listDirectiveParentIDArg
         );
+        if (parentArg) {
+          parentIdFound = true;
+        }
+      }
+      if (parentIdFound) {
         return;
       }
-      let parentArg = directive.arguments?.find(
-        (arg) => arg.name.value === config3.listDirectiveParentIDArg
+      const allLists = node.directives?.find(
+        ({ name: name2 }) => config3.listAllListsDirective === name2.value
       );
-      if (!parentArg) {
-        ctx.reportError(
-          new graphql25.GraphQLError("parentID is required for this list fragment")
-        );
+      if (allLists || config3.defaultListTarget === "all") {
         return;
       }
+      ctx.reportError(
+        new graphql25.GraphQLError(
+          `For this list fragment, you need to add or @${config3.listParentDirective} or @${config3.listAllListsDirective} directive to specify the behavior`
+        )
+      );
+      return;
     },
     Directive(node) {
       const directiveName = node.name.value;
@@ -72661,6 +72979,13 @@ function paginateArgs(config3, filepath) {
               )
             );
           }
+          if (forward && backwards) {
+            ctx.reportError(
+              new graphql25.GraphQLError(
+                `A field with cursor pagination cannot go forwards an backwards simultaneously`
+              )
+            );
+          }
           return;
         }
         const offsetPagination = fieldArgs["offset"] === "Int" && fieldArgs["limit"] === "Int";
@@ -72749,6 +73074,42 @@ function nodeDirectives(config3, directives) {
           ctx.reportError(
             new graphql25.GraphQLError(paginateOnNonNodeMessage(config3, node.name.value))
           );
+        }
+      }
+    };
+  };
+}
+function checkMutationOperation(config3) {
+  return function(ctx) {
+    return {
+      FragmentSpread(node, _, __, ___, ancestors) {
+        const append = node.directives?.find(
+          (c) => c.name.value === config3.listAppendDirective
+        );
+        const prepend = node.directives?.find(
+          (c) => c.name.value === config3.listPrependDirective
+        );
+        if (append && prepend) {
+          ctx.reportError(
+            new graphql25.GraphQLError(
+              `You can't apply both @${config3.listPrependDirective} and @${config3.listAppendDirective} at the same time`
+            )
+          );
+          return;
+        }
+        const parentId = node.directives?.find(
+          (c) => c.name.value === config3.listParentDirective
+        );
+        const allLists = node.directives?.find(
+          (c) => c.name.value === config3.listAllListsDirective
+        );
+        if (parentId && allLists) {
+          ctx.reportError(
+            new graphql25.GraphQLError(
+              `You can't apply both @${config3.listParentDirective} and @${config3.listAllListsDirective} at the same time`
+            )
+          );
+          return;
         }
       }
     };
@@ -73051,12 +73412,7 @@ async function collectDocuments(config3) {
 }
 async function processJSFile(config3, contents) {
   const documents = [];
-  try {
-    var program = (await parseJS(contents)).script;
-  } catch (e2) {
-    console.log(contents);
-    throw e2;
-  }
+  var program = (await parseJS(contents)).script;
   await find_graphql(config3, program, {
     tag({ tagContent }) {
       documents.push(tagContent);
@@ -73268,8 +73624,11 @@ function HoudiniWatchSchemaPlugin(opts = {}) {
       if (interval <= 0) {
         return;
       }
-      await sleep(interval);
-      await pull(true);
+      async function sleepAndStartPullLoop(interval2) {
+        await sleep(interval2);
+        await pull(true);
+      }
+      sleepAndStartPullLoop(interval);
     },
     buildEnd() {
       go = false;

@@ -13,6 +13,7 @@ import { fileURLToPath, pathToFileURL } from 'url'
 import { ConfigFile, CachePolicy } from '../runtime/lib'
 import { computeID, defaultConfigValues, keyFieldsForType } from '../runtime/lib/config'
 import { TransformPage } from '../vite/houdini'
+import { houdini_mode } from './constants'
 import { HoudiniError } from './error'
 import * as fs from './fs'
 import { pullSchema } from './introspection'
@@ -37,6 +38,8 @@ export class Config {
 	cacheBufferSize?: number
 	defaultCachePolicy: CachePolicy
 	defaultPartial: boolean
+	internalListPosition: 'first' | 'last'
+	defaultListTarget: 'all' | null = null
 	definitionsFolder?: string
 	newSchema: string = ''
 	newDocuments: string = ''
@@ -76,6 +79,8 @@ export class Config {
 			definitionsPath,
 			defaultCachePolicy = CachePolicy.CacheOrNetwork,
 			defaultPartial = false,
+			defaultListPosition = 'append',
+			defaultListTarget = null,
 			defaultKeys,
 			types = {},
 			logLevel,
@@ -104,7 +109,12 @@ export class Config {
 
 		// save the values we were given
 		this.schemaPath = schemaPath
-		this.apiUrl = apiUrl
+		if (apiUrl && apiUrl.startsWith('env:')) {
+			this.apiUrl = process.env[apiUrl.slice('env:'.length)]
+		} else {
+			this.apiUrl = apiUrl
+		}
+
 		this.filepath = filepath
 		this.exclude = Array.isArray(exclude) ? exclude : [exclude]
 		this.module = module
@@ -115,6 +125,8 @@ export class Config {
 		this.cacheBufferSize = cacheBufferSize
 		this.defaultCachePolicy = defaultCachePolicy
 		this.defaultPartial = defaultPartial
+		this.internalListPosition = defaultListPosition === 'append' ? 'last' : 'first'
+		this.defaultListTarget = defaultListTarget
 		this.definitionsFolder = definitionsPath
 		this.logLevel = ((logLevel as LogLevel) || LogLevel.Summary).toLowerCase() as LogLevel
 		this.disableMasking = disableMasking
@@ -304,7 +316,7 @@ export class Config {
 	get runtimeSource() {
 		// when running in the real world, scripts are nested in a sub directory of build, in tests they aren't nested
 		// under /src so we need to figure out how far up to go to find the appropriately compiled runtime
-		const relative = process.env.TEST
+		const relative = houdini_mode.is_testing
 			? path.join(currentDir, '..', '..')
 			: // start here and go to parent until we find the node_modules/houdini folder
 			  this.findModule()
@@ -434,7 +446,7 @@ export class Config {
 	}
 
 	pluginDirectory(name: string) {
-		return process.env.TEST
+		return houdini_mode.is_testing
 			? path.resolve('../../../', name)
 			: path.join(this.rootDir, 'plugins', name)
 	}
@@ -467,6 +479,10 @@ export class Config {
 
 	get listDirectiveParentIDArg() {
 		return 'parentID'
+	}
+
+	get listAllListsDirective() {
+		return 'allLists'
 	}
 
 	get listNameArg() {
@@ -577,6 +593,7 @@ export class Config {
 				this.listPrependDirective,
 				this.listAppendDirective,
 				this.listDirectiveParentIDArg,
+				this.listAllListsDirective,
 				this.whenDirective,
 				this.whenNotDirective,
 				this.argumentsDirective,

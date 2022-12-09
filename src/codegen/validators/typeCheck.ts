@@ -241,33 +241,32 @@ export default async function typeCheck(
 				)
 
 				// make sure there is an id field
-				// TODO handle union type - how to know if type is union?
-				// const missingIDFields = config
-				// 	.keyFieldsForType(type.name)
-				// 	.filter((fieldName) => !type.getFields()[fieldName])
+				const missingIDFields = config
+					.keyFieldsForType(type.name)
+					.filter((fieldName) => !type.getFields()[fieldName])
 
-				// if (missingIDFields.length > 0) {
-				// 	if (error) {
-				// 		errors.push(
-				// 			new HoudiniError({
-				// 				filepath: filename,
-				// 				message: error,
-				// 			})
-				// 		)
-				// 	} else {
-				// 		errors.push(
-				// 			new HoudiniError({
-				// 				filepath: filename,
-				// 				message: `@${
-				// 					config.listDirective
-				// 				} can only be applied to types with the necessary id fields: ${missingIDFields.join(
-				// 					', '
-				// 				)}.`,
-				// 			})
-				// 		)
-				// 	}
-				// 	return
-				// }
+				if (missingIDFields.length > 0) {
+					if (error) {
+						errors.push(
+							new HoudiniError({
+								filepath: filename,
+								message: error,
+							})
+						)
+					} else {
+						errors.push(
+							new HoudiniError({
+								filepath: filename,
+								message: `@${
+									config.listDirective
+								} can only be applied to types with the necessary id fields: ${missingIDFields.join(
+									', '
+								)}.`,
+							})
+						)
+					}
+					return
+				}
 
 				// add the list to the list
 				lists.push(listName)
@@ -321,6 +320,8 @@ export default async function typeCheck(
 					listTypes,
 					fragments,
 				}),
+				// checkMutationOperation
+				checkMutationOperation(config),
 				// pagination directive can only show up on nodes or the query type
 				nodeDirectives(config, [config.paginateDirective]),
 				// this replaces KnownArgumentNamesRule
@@ -416,29 +417,43 @@ const validateLists = ({
 					return
 				}
 
+				// Do we have the parentId another way?
+				let parentIdFound = false
 				// look for one of the list directives
 				directive = node.directives?.find(({ name }) => [
 					[config.listPrependDirective, config.listAppendDirective].includes(name.value),
 				])
-				// if there is no directive
-				if (!directive) {
-					ctx.reportError(
-						new graphql.GraphQLError('parentID is required for this list fragment')
+				if (directive) {
+					// find the argument holding the parent ID
+					let parentArg = directive.arguments?.find(
+						(arg) => arg.name.value === config.listDirectiveParentIDArg
 					)
+					if (parentArg) {
+						parentIdFound = true
+					}
+				}
+
+				if (parentIdFound) {
+					// parentId was found, so we're good to go
 					return
 				}
 
-				// find the argument holding the parent ID
-				let parentArg = directive.arguments?.find(
-					(arg) => arg.name.value === config.listDirectiveParentIDArg
+				// look for allLists directive
+				const allLists = node.directives?.find(
+					({ name }) => config.listAllListsDirective === name.value
 				)
 
-				if (!parentArg) {
-					ctx.reportError(
-						new graphql.GraphQLError('parentID is required for this list fragment')
-					)
+				// if there is the directive or it's
+				if (allLists || config.defaultListTarget === 'all') {
 					return
 				}
+
+				ctx.reportError(
+					new graphql.GraphQLError(
+						`For this list fragment, you need to add or @${config.listParentDirective} or @${config.listAllListsDirective} directive to specify the behavior`
+					)
+				)
+				return
 			},
 			// if we run into a directive that points to a list, make sure that list exists
 			Directive(node) {
@@ -798,14 +813,13 @@ function paginateArgs(config: Config, filepath: string) {
 						)
 					}
 
-					// Why? Shouldn't a person be able to navigate to the previous page?
-					// if (forward && backwards) {
-					// 	ctx.reportError(
-					// 		new graphql.GraphQLError(
-					// 			`A field with cursor pagination cannot go forwards an backwards simultaneously`
-					// 		)
-					// 	)
-					// }
+					if (forward && backwards) {
+						ctx.reportError(
+							new graphql.GraphQLError(
+								`A field with cursor pagination cannot go forwards an backwards simultaneously`
+							)
+						)
+					}
 
 					return
 				}
@@ -921,6 +935,45 @@ function nodeDirectives(config: Config, directives: string[]) {
 					ctx.reportError(
 						new graphql.GraphQLError(paginateOnNonNodeMessage(config, node.name.value))
 					)
+				}
+			},
+		}
+	}
+}
+
+function checkMutationOperation(config: Config) {
+	return function (ctx: graphql.ValidationContext): graphql.ASTVisitor {
+		return {
+			FragmentSpread(node, _, __, ___, ancestors) {
+				const append = node.directives?.find(
+					(c) => c.name.value === config.listAppendDirective
+				)
+
+				const prepend = node.directives?.find(
+					(c) => c.name.value === config.listPrependDirective
+				)
+				if (append && prepend) {
+					ctx.reportError(
+						new graphql.GraphQLError(
+							`You can't apply both @${config.listPrependDirective} and @${config.listAppendDirective} at the same time`
+						)
+					)
+					return
+				}
+
+				const parentId = node.directives?.find(
+					(c) => c.name.value === config.listParentDirective
+				)
+				const allLists = node.directives?.find(
+					(c) => c.name.value === config.listAllListsDirective
+				)
+				if (parentId && allLists) {
+					ctx.reportError(
+						new graphql.GraphQLError(
+							`You can't apply both @${config.listParentDirective} and @${config.listAllListsDirective} at the same time`
+						)
+					)
+					return
 				}
 			},
 		}

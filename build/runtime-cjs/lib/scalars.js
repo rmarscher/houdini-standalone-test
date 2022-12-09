@@ -25,6 +25,7 @@ __export(scalars_exports, {
 });
 module.exports = __toCommonJS(scalars_exports);
 var import_config = require("./config");
+var import_selection = require("./selection");
 async function marshalSelection({
   selection,
   data
@@ -36,15 +37,16 @@ async function marshalSelection({
   if (Array.isArray(data)) {
     return await Promise.all(data.map((val) => marshalSelection({ selection, data: val })));
   }
+  const targetSelection = (0, import_selection.getFieldsForType)(selection, data["__typename"]);
   return Object.fromEntries(
     await Promise.all(
       Object.entries(data).map(async ([fieldName, value]) => {
-        const { type, fields } = selection[fieldName];
+        const { type, selection: selection2 } = targetSelection[fieldName];
         if (!type) {
           return [fieldName, value];
         }
-        if (fields) {
-          return [fieldName, await marshalSelection({ selection: fields, data: value })];
+        if (selection2) {
+          return [fieldName, await marshalSelection({ selection: selection2, data: value })];
         }
         if (config.scalars?.[type]) {
           const marshalFn = config.scalars[type].marshal;
@@ -110,16 +112,17 @@ function unmarshalSelection(config, selection, data) {
   if (Array.isArray(data)) {
     return data.map((val) => unmarshalSelection(config, selection, val));
   }
+  const targetSelection = (0, import_selection.getFieldsForType)(selection, data["__typename"]);
   return Object.fromEntries(
     Object.entries(data).map(([fieldName, value]) => {
-      const { type, fields } = selection[fieldName];
+      const { type, selection: selection2 } = targetSelection[fieldName];
       if (!type) {
         return [fieldName, value];
       }
-      if (fields) {
+      if (selection2) {
         return [
           fieldName,
-          unmarshalSelection(config, fields, value)
+          unmarshalSelection(config, selection2, value)
         ];
       }
       if (value === null) {

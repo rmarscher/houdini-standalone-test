@@ -19,8 +19,8 @@ test('generates an artifact for every document', async function () {
 
 	expect(JSON.parse((await fs.readFile(config.persistedQueryPath))!)).toMatchInlineSnapshot(`
 		{
-		    "5ba2c5763a93559769c84d7dd536becf80b4c7be6db9f6af232a4309ebff665c": "query TestQuery1 {\\n  version\\n}",
-		    "eb8e226b085997a05050d4407492d37aaf133c02186dfcdb75b8bebdb2d8d8fb": "query TestQuery2 {\\n  user {\\n    ...TestFragment\\n    id\\n  }\\n}\\n\\nfragment TestFragment on User {\\n  firstName\\n}"
+		    "361432f464ed44eed788f3ea66c4dabc46437b88edbe7daccca87045fd31447f": "query TestQuery1 {\\n  version\\n}\\n",
+		    "b1aea7d645764d0f015d97146f7fb7dd32f1156841b1ece9f553efc7ebb216b6": "query TestQuery2 {\\n  user {\\n    ... on User {\\n      firstName\\n    }\\n    id\\n    ...TestFragment\\n  }\\n}\\n\\nfragment TestFragment on User {\\n  firstName\\n}\\n"
 		}
 	`)
 })
